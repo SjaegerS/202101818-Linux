@@ -165,6 +165,7 @@ void timecheck(int s) {
     }
     alarm(1);
 }
+
 int main() {
     int i;
     pid_t pid;
