@@ -124,8 +124,9 @@ void timecheck(int s) {
         printf("실행중인 프로세스 %d (남은 cpu 버스트: %d, 남은 timequantum : %d)", pcb[nowprocess].pid, pcb[nowprocess].cpuburstrest, pcb[nowprocess].timequantumrest);
         pcb[nowprocess].timequantumrest--;
         kill(pcb[nowprocess].pid, SIGUSR1);
-        if (pcb[nowprocess].cpuburstrest > 0)
-             pcb[nowprocess].cpuburstrest--;
+        if (pcb[nowprocess].cpuburstrest > 0){
+             pcb[nowprocess].cpuburstrest -= cpuburst;
+	}
         if (nowprocess != -1) {
             if (pcb[nowprocess].timequantumrest <= 0 && pcb[nowprocess].cpuburstrest > 0) {
                 printf(" \n => 다음 타임에 timequantum 만료 후 수행 프로세스 변경");
@@ -146,7 +147,7 @@ void timecheck(int s) {
             printf("프로세스 문맥 교환 진행, 프로세스 %d 로 변경 후 수행 시작 (남은 cpu 버스트 : %d, 남은 timequantum : %d)\n", pcb[next].pid, pcb[next].cpuburstrest, timequantum);
             pcb[next].timequantumrest--;
             if (pcb[next].cpuburstrest > 0){
-                pcb[next].cpuburstrest--;
+                pcb[nowprocess].cpuburstrest -= cpuburst;
             }
             kill(pcb[next].pid, SIGUSR1);
         } else {
